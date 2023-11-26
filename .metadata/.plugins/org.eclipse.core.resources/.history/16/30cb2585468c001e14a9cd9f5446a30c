@@ -1,0 +1,29 @@
+package com.app.bookshop.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.app.bookshop.service.ShoppingCartService;
+
+@RestController
+@RequestMapping("/shoppingCart")
+public class CartController {
+	@Autowired
+	public ShoppingCartService cartService;
+	
+	@PostMapping("/add")
+	public String addToCart(@RequestParam Long bookId,@RequestParam Long userId)
+	{
+		return cartService.addBookToCart(bookId, userId);
+	}
+	
+	@GetMapping("/show_cart")
+	public ResponseEntity<?> showCartContents(@RequestParam Long userId) {
+		return  ResponseEntity.status(HttpStatus.OK).body(bookingCartService.getCartDetails(userId));
+		
+	}
+}

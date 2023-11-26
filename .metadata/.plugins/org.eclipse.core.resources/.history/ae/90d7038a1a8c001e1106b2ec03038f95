@@ -1,0 +1,14 @@
+package com.app.bookshop.pojos;
+
+import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+public class CartIteam extends BaseEntity{
+
+}

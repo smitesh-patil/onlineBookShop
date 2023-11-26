@@ -1,0 +1,25 @@
+package com.app.bookshop.dto;
+
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+
+public class CartIteamsDto {
+	@Column(length = 50)
+	private String title;
+	@Column(length = 50)
+	private String author;
+	@Column(length = 50)
+	private String category;
+	@Column(length = 50)
+	private String language;
+	@Column(name="publishdate")
+	private LocalDate publishDate;
+	private double price;
+	@Column(length = 1000)
+	private String description;
+	private int qty;
+	@Column(length = 300, name = "image")
+	private String imagePath;
+
+}

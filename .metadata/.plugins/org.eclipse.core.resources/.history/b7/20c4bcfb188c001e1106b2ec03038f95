@@ -1,0 +1,5 @@
+package com.app.bookshop.pojos;
+
+public class ShoppingCart extends BaseEntity {
+
+}

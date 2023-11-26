@@ -1,0 +1,9 @@
+package com.app.bookshop.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.app.bookshop.pojos.ShoppingCart;
+
+public interface ShoppingCartDao extends JpaRepository<ShoppingCart, Long>{
+
+}

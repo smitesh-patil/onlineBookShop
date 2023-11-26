@@ -1,0 +1,8 @@
+package com.app.bookshop.service;
+
+import java.util.List;
+
+public interface ShoppingCartService {
+String addBookToCart(Long cartId,Long userId);
+List<CartIteamsDto> getCartDetails(Long userId);
+}

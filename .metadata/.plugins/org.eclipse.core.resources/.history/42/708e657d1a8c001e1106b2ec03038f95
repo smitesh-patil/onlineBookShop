@@ -1,0 +1,5 @@
+package com.app.bookshop.pojos;
+
+public class CartIteam extends BaseEntity{
+
+}

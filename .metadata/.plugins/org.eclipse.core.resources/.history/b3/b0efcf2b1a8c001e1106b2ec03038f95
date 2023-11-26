@@ -1,0 +1,24 @@
+package com.app.bookshop.pojos;
+
+import java.time.LocalDate;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+
+public class ShoppingCart extends BaseEntity {
+	
+	private int totalItems;
+	private double totalCartPrice;
+	@CreationTimestamp
+	private LocalDate createdOn;
+	@UpdateTimestamp
+	private LocalDate updatedOn;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "customer_id")
+	private User cartOwner;
+}

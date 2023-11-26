@@ -1,0 +1,5 @@
+package com.app.bookshop.dto;
+
+public class CartIteamsDto {
+
+}
