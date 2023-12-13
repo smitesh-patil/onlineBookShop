@@ -1,0 +1,16 @@
+package com.app.bookshop.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.app.bookshop.pojos.CartIteam;
+
+public interface CartIteamDao extends JpaRepository<CartIteam, Long>{
+List<CartIteam> findByMyCartId(Long cartId);
+
+@Query(value = "delete from cart_iteam where product_id=? and cart_id=?")
+boolean deleteFromCart(Long product_id, Long cart_id);
+
+}

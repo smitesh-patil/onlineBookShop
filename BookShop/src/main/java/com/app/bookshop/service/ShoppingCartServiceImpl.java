@@ -36,68 +36,93 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	UserService userService;
 	@Autowired
 	ModelMapper mapper;
+
 	@Override
-	public String addBookToCart(Long bookId, Long userId) {
+	public String addBookToCart(Long bookId, Long userId, int quantity) {
 		// TODO Auto-generated method stub
-		User user=userService.getUserDetails(userId);
-		if(user.getMyCart()==null)
-		{
-			ShoppingCart newCart=new ShoppingCart();
+		User user = userService.getUserDetails(userId);
+		if (user.getMyCart() == null) {
+			ShoppingCart newCart = new ShoppingCart();
 			user.addCart(newCart);
 		}
-		
-		ShoppingCart cart=shoppingDao.findByCartOwnerId(userId)
+
+		ShoppingCart cart = shoppingDao.findByCartOwnerId(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("Invalid User ID !!!!!"));
-		
-		Books book=booksDao.findById(bookId)
+
+		Books book = booksDao.findById(bookId)
 				.orElseThrow(() -> new ResourceNotFoundException("Invalid book ID !!!!!"));
-		
-		CartIteam newIteam=new CartIteam(cart,book);
+
+//		CartIteam ac=cartIteamDao.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Invalid book ID !!!!!"));
+//		if(ac.getBooks()!=)
+//		{
+//			
+//		}
+
+		double totalPrice = book.getPrice() * quantity;
+		CartIteam newItem = new CartIteam(quantity, totalPrice, cart, book);
+		cart.getCartItems().add(newItem);
+		CartIteam persCart = cartIteamDao.save(newItem);
+		cart.setTotalCartPrice(cart.getTotalCartPrice() + totalPrice);
+		cart.setTotalItems(cart.getTotalItems() + 1);
 		System.out.println(cart.getCartItems().contains(book.getId()));
-		System.out.println(cart.getCartOwner().getId()==userId);
-		
-		CartIteam persCart=cartIteamDao.save(newIteam);
+		System.out.println(cart.getCartOwner().getId() == userId);
+
 		return "book added in the BookingCart successfully";
 	}
+
 	@Override
 	public List<CartIteamsDto> getCartDetails(Long userId) {
 		// TODO Auto-generated method stub
-		User user=userService.getUserDetails(userId);
-		ShoppingCart cart=shoppingDao.findByCartOwnerId(userId)
+		User user = userService.getUserDetails(userId);
+		ShoppingCart cart = shoppingDao.findByCartOwnerId(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("Invalid User ID !!!!!"));
-		List<CartIteam> per= cartIteamDao.findByMyCartId(cart.getId());
-		List<Books> b=new ArrayList<Books>();
-		for(CartIteam c:per)
-		{
-			Books n=new Books(c.getBooks().getTitle(),
-					c.getBooks().getAuthor(),
-					c.getBooks().getCategory(),
-					c.getBooks().getLanguage(),
-					c.getBooks().getPublishDate(),
-					c.getBooks().getPrice(),
-					c.getBooks().getDescription(),
-					c.getBooks().getQty()
-					);
+		List<CartIteam> per = cartIteamDao.findByMyCartId(cart.getId());
+		List<Books> b = new ArrayList<Books>();
+		for (CartIteam c : per) {
+			Books n = new Books(c.getBooks().getTitle(), c.getBooks().getAuthor(), c.getBooks().getCategory(),
+					c.getBooks().getLanguage(), c.getBooks().getPublishDate(), c.getBooks().getPrice(),
+					c.getBooks().getDescription(), c.getBooks().getQty());
 			b.add(n);
 		}
 		CartIteamsDto nc;
-		List<CartIteamsDto> cdto=new ArrayList<CartIteamsDto>();
-		for(Books bb:b)
-		{
-		nc=new CartIteamsDto(  //bb.getId(),
-				bb.getTitle(),
-		bb.getAuthor(),
-		bb.getCategory(),
-        bb.getLanguage(),
-	    bb.getPublishDate(),
-	    bb.getPrice(),
-		bb.getDescription(),
-	    bb.getQty()
-	    );
-		cdto.add(nc);
+		List<CartIteamsDto> cdto = new ArrayList<CartIteamsDto>();
+		for (Books bb : b) {
+			nc = new CartIteamsDto( // bb.getId(),
+					bb.getTitle(), bb.getAuthor(), bb.getCategory(), bb.getLanguage(), bb.getPublishDate(),
+					bb.getPrice(), bb.getDescription(), bb.getQty());
+			cdto.add(nc);
 		}
-		
-		return cdto ;
+
+		return cdto;
+	}
+
+	@Override
+	public double getTotalCartPrice(Long userId) {
+		ShoppingCart cart = shoppingDao.findByCartOwnerId(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("Invalid User ID !!!!!"));
+
+		return cart.getTotalCartPrice();
+	}
+
+	@Override
+	public int getTotalCartItems(Long userId) {
+		ShoppingCart cart = shoppingDao.findByCartOwnerId(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("Invalid User ID !!!!!"));
+		return cart.getTotalItems();
+	}
+
+	@Override
+	public String deleteCartContents(Long userId) {
+		ShoppingCart cart = shoppingDao.getCartWithcartItems(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("Cart Not found!!!!!!!!"));
+
+		int deletedCartItems = cartIteamDao.deleteCartItems(cart.getId());
+
+		cart.setTotalCartPrice(0);
+		cart.setTotalItems(0);
+		System.out.println("deleted cart items " + deletedCartItems);
+		return "user's cart emptied !!!!!";
+
 	}
 
 }

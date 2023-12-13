@@ -27,6 +27,8 @@ import lombok.ToString;
 @ToString(exclude = {"cartOwner","cartItems"})
 public class ShoppingCart extends BaseEntity {
 	//private double totalCartPrice;
+	private int totalItems;
+	private double totalCartPrice;
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id") // FK constraint
 	private User cartOwner;

@@ -15,8 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartIteam extends BaseEntity{
-//	private int quantity;
-//	private double totalPrice;
+	private int quantity;
+	private double totalPrice;
 	@ManyToOne
 	@JoinColumn(name = "cart_id")
 	private ShoppingCart myCart;

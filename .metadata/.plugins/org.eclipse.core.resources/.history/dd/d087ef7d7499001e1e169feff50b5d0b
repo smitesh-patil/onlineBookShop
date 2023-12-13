@@ -1,0 +1,13 @@
+package com.app.bookshop.service;
+
+import java.util.List;
+
+import com.app.bookshop.dto.ApiResponse;
+import com.app.bookshop.dto.CartIteamsDto;
+import com.app.bookshop.pojos.Books;
+
+public interface ShoppingCartService {
+String addBookToCart(Long cartId,Long userId,int quantity);
+List<CartIteamsDto> getCartDetails(Long userId);
+//String removeFromCart(Long product_id,Long cart_id);
+}

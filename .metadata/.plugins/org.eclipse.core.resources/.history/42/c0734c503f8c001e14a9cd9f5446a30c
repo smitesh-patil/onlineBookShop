@@ -1,5 +1,0 @@
-package com.app.bookshop.service;
-
-public interface ShoppingCartService {
-String addBookToCart(Long cartId,Long userId);
-}
